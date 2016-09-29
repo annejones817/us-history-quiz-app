@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>U.S History Quiz</title>
+	<meta name="description" content="A 10-question quiz about the history of the United States of America" >
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css" >
+	<link rel="stylesheet" href="main.css" >
+</head>
+<body>
+	
+
+	<header>
+		<h1>How much do you know about U.S. History?</h1>
+	</header>
+
+	<div class='quiz-contents'>
+		<div class='start-quiz'>
+			<h2 class='welcome'>Welcome to the quiz!</h2>
+			<p class="welcome-description">To get started, click the button below. You will be asked 10 multiple choice questions about U.S. history. Good luck!</p>
+			<button class="start-quiz-button">Start Quiz</button>
+		</div>
+		<form name='quiz' class='quiz-questions-area hidden'>
+			
+			<fieldset class='answer-choices'></fieldset>
+			<button type='submit' class='submit-answer'>Submit Answer</button>
+			<p class='progress'></p>
+
+		</form>
+		<div class='answer-explanation hidden'>
+			<button type='click' class='next'>Next</button>
+		</div>
+	</div>
+
+
+
+
+	<script   src="https://code.jquery.com/jquery-3.1.1.slim.min.js"   integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="   crossorigin="anonymous"></script>
+	<script src="app.js"></script>
+	
+</body>
+</html>
