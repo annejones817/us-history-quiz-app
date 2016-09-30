@@ -158,12 +158,16 @@ $(document).ready(function(){
 	///Check Answer
 	$('.quiz-questions-area').submit(function(event){
 		event.preventDefault();
+		var answer = $('.answer-choices').find(':radio:checked').length;
+		if (answer>0) { 
 		$('.question').remove();
 		$('.answer-choice').remove();
 		$('.submit-answer').addClass('hidden');
 		$('.progress-details').remove();
 		quiz.progressCounter++;
 		checkAnswer(quiz, quiz.currentAnswer);
+		}
+		else {alert('Please select an answer.');}
 	});
 
 	//Next Question
