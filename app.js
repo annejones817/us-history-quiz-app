@@ -174,14 +174,7 @@ $(document).ready(function(){
 
 	//Try Again
 	$('.quiz-contents').on('click', '.try-again', function(event){
-		quiz.questionCounter = 0;
-		quiz.questionChoicesCounter = 0;
-		quiz.progressCounter=1;
-		quiz.currentAnswer;
-		quiz.numCorrect = 0;
-		quiz.numIncorrect = 0;
-		$('.end-card').remove();
-		handleQuestionTransition();
+		location.reload(true);
 	});
 
 });
