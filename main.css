@@ -78,6 +78,12 @@ button {
 	margin-bottom:10px;
 }
 
+.require-answer {
+	font-family:tahoma, sans-serif;
+	color:red;
+	font-weight:bold;
+}
+
 
 
 

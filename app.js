@@ -160,6 +160,7 @@ $(document).ready(function(){
 		event.preventDefault();
 		var answer = $('.answer-choices').find(':radio:checked').length;
 		if (answer>0) { 
+		$('.require-answer').remove();
 		$('.question').remove();
 		$('.answer-choice').remove();
 		$('.submit-answer').addClass('hidden');
@@ -167,7 +168,7 @@ $(document).ready(function(){
 		quiz.progressCounter++;
 		checkAnswer(quiz, quiz.currentAnswer);
 		}
-		else {alert('Please select an answer.');}
+		else {$('form').prepend('<span class="require-answer">Please select an answer.</span>');}
 	});
 
 	//Next Question
