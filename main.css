@@ -1,18 +1,30 @@
+body {
+	background-color: #92a8d1;
+	color: #034f84;
+}
 header {
 	text-align: center;
 	width:100%;
 	padding: 15px 0 15px 0; 
 	font-family: tahoma, sans-serif;
 	font-size: 2em;
-	background-color: gray;
 	margin-bottom:20px;
+
 }
 
 .quiz-contents {
 	width: 100%;
 	margin: auto;
-	border: 1px solid black;
 	padding:15px;
+	background-color: #034f84;
+	color:#dbd8d8;
+	border-radius:15px;
+	box-shadow: 2px 5px 5px #02385f;
+	min-height: 8em;
+}
+
+.start-quiz {
+	margin-top:35px;
 }
 
 @media only screen and (min-width: 640px) {
@@ -38,9 +50,17 @@ header {
 button {
 	display:block;
 	margin: 0 auto;
-	background-color: blue;
-	font-size: 1.1em;
-	color:white;
+	background-color: #c94c4c;
+	font-size: 1.05em;
+	color:#dbd8d8;
+	border:none;
+	border-radius:5px;
+	padding:3px 15px 3px 15px;
+	box-shadow: 2px 5px 5px #b04040;
+}
+
+button:hover {
+	font-weight:bold;
 }
 
 .hidden {

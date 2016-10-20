@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	//State Object
+	//Object to store quiz data
 	var quiz = {
 		questionAnswer: [ ]
 		};
