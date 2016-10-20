@@ -44,43 +44,34 @@ $(document).ready(function(){
 			 choices: [8,10,13,15],
 			 answer: 13},
 		];
+		
+	//Set all tracker variables to the correct "start of game" value	
+	function resetQuizTrackers() {
 		quiz.questionCounter = 0;
 		quiz.questionChoicesCounter = 0;
 		quiz.progressCounter=1;
 		quiz.currentAnswer;
 		quiz.numCorrect = 0;
 		quiz.numIncorrect = 0;
-
-
-	//Display Question
-	var displayQuestion = function(quiz, element) {
-		if (quiz.questionCounter===10) {
-			$('.submit-answer').remove();
-			element.remove();
-			$('.quiz-contents').append(
-				"<div class='end-card'><h2>Congratulations! You finished the quiz.</h2> <h3>Your Score: "
-				+ quiz.numCorrect + "/10</h3>" +
-				"<button type='click' class='try-again'>Try Again</button></div>"
-				);
-		}
-		else {
-		element.prepend("<dd class='question'>" + quiz.questionAnswer[quiz.questionCounter].question + "</dd>");
-		}
-		
 	}	
 
-	//Remove Question
-	var removeQuestion = function(quiz, element) {
-		element.remove('.question');
+	//Handle Question Transition
+	function handleQuestionTransition() {
+		$('.quiz-questions-area, .submit-answer').removeClass('hidden');		
+		displayQuestion(quiz, $('.quiz-questions-area'));
+		displayChoices(quiz, $('.answer-choices'));
+		updateProgress(quiz, $('.progress'));
 	}
+		
+
+	//Display Question
+	function displayQuestion(quiz, element) {
+		element.prepend("<span class='question'>" + quiz.questionAnswer[quiz.questionCounter].question + "</span>");
+	}	
 
 	//Display Choices
-		var displayChoices = function(quiz, element) {
-		if (quiz.questionChoicesCounter===10) {
-			element.remove();
-		}
-		else {
-		for (var i=0; i<quiz.questionAnswer[quiz.questionChoicesCounter].choices.length; i++) {
+	function displayChoices(quiz, element) {
+	for (var i=0; i<quiz.questionAnswer[quiz.questionChoicesCounter].choices.length; i++) {
 		element.append("<span class='answer-choice'><input name='answer-choice' value='"
 			+quiz.questionAnswer[quiz.questionChoicesCounter].choices[i]
 			+"' type='radio' class='answer-choice-input' id='a" 
@@ -89,26 +80,27 @@ $(document).ready(function(){
 			+ quiz.questionAnswer[quiz.questionChoicesCounter].choices[i] 
 			+ "</label></span>" )
 		}
-	}
-		
 	};
 
 	//Update Progress 
-	var updateProgress = function(quiz, element) {
+	function updateProgress(quiz, element) {
 		element.append("<span class='progress-details'>You are on question " + quiz.progressCounter + " of " + 
 			quiz.questionAnswer.length + ". <br><br> Current Score: " + quiz.numCorrect + 
 			" correct, " + quiz.numIncorrect + " incorrect</span>");
 	}
 
+	//Remove Question
+	function removeQuestion(quiz, element) {
+		element.remove('.question');
+	}
+
 	//Remove Choices
-	var removeChoices = function(quiz, element) {
+	function removeChoices(quiz, element) {
 		element.remove('.answer-choice');
 	}
 
-	//Require Answer
-
 	//Check Answer
-	var checkAnswer = function(quiz, currentAnswer) {
+	function checkAnswer(quiz, currentAnswer) {
 		$('.answer-explanation').removeClass('hidden');
 		$('.explanation').remove();
 		if (currentAnswer == quiz.questionAnswer[quiz.questionCounter].answer) {
@@ -116,11 +108,8 @@ $(document).ready(function(){
 				"<p class='explanation'>Good job! " + currentAnswer 
 				+ " is correct. </p>"
 				);
-			quiz.numCorrect++;
-			console.log(quiz.numCorrect);
-			
-		}
-		else {
+			quiz.numCorrect++;			
+		} else {
 			$('.answer-explanation').prepend(
 				"<p class='explanation'>Sorry, " + currentAnswer 
 				+ " is not correct. The correct answer is " +
@@ -132,54 +121,59 @@ $(document).ready(function(){
 		quiz.questionChoicesCounter += 1;
 	}
 	
-	//Handle Question Transition
-	var handleQuestionTransition = function() {
-		$('.quiz-questions-area, .submit-answer').removeClass('hidden');		
-		displayQuestion(quiz, $('.quiz-questions-area'));
-		displayChoices(quiz, $('.answer-choices'));
-		updateProgress(quiz, $('.progress'));
-	}
 
 
-	//Event Listeners
+
+////////Event Listeners//////////////////
 	///////Start Quiz
-	$('.start-quiz-button').click(function(event){
+	$('.start-quiz-form').submit(function(event){
 		event.preventDefault(); 
+		resetQuizTrackers();
 		$(this).closest('div').remove(); 
 		handleQuestionTransition();
 	});
 
-	//Set Answer
+	//Record answer selected by user
 	$('.answer-choices').on('click', '.answer-choice-input', function(event) {
 		quiz.currentAnswer = $('input[name=answer-choice]:checked').val();
 	});
 
-
-	///Check Answer
+	///Handle question submit & check accuracy
 	$('.quiz-questions-area').submit(function(event){
 		event.preventDefault();
-		var answer = $('.answer-choices').find(':radio:checked').length;
-		if (answer>0) { 
-		$('.require-answer').remove();
-		$('.question').remove();
-		$('.answer-choice').remove();
-		$('.submit-answer').addClass('hidden');
-		$('.progress-details').remove();
-		quiz.progressCounter++;
-		checkAnswer(quiz, quiz.currentAnswer);
+		var answerLength = $('.answer-choices').find(':radio:checked').length;
+		if (answerLength>0) { 
+			$('.require-answer').remove();
+			$('.question').remove();
+			$('.answer-choice').remove();
+			$('.submit-answer').addClass('hidden');
+			$('.progress-details').remove();
+			quiz.progressCounter++;
+			checkAnswer(quiz, quiz.currentAnswer);
+		} else {
+			$('form').prepend('<span class="require-answer">Please select an answer.</span>');
 		}
-		else {$('form').prepend('<span class="require-answer">Please select an answer.</span>');}
 	});
 
-	//Next Question
+	//Transition from explanation to next question & handle end of quiz
 	$('.next').click(function(event){
 		$(this).closest('div').addClass('hidden'); 
-		handleQuestionTransition();
+		if (quiz.questionCounter===10) {
+			$('.quiz-contents').append(
+				"<div class='end-card'><h2>Congratulations! You finished the quiz.</h2> <h3>Your Score: "
+				+ quiz.numCorrect + "/10</h3>" +
+				"<button type='click' class='try-again'>Try Again</button></div>"
+				);
+		} else {
+			handleQuestionTransition();
+		}
 	});
 
 	//Try Again
 	$('.quiz-contents').on('click', '.try-again', function(event){
-		location.reload(true);
-	});
+		$('.end-card').remove();
+		resetQuizTrackers();
+		handleQuestionTransition();
 
+	});
 });
